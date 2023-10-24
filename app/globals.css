@@ -7,39 +7,41 @@
   margin: 2xp;
   font-family: 'Kanit', sans-serif;
   text-align: center;
-  font-size :large;
+  font-size: 80cm;
+  font-size: large;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background : #e8e8e8 ;
+  background: #ffffff;
 }
 
 .card {
-  margin: 30px;
-    display: flex;
-    justify-content: center;
+  margin: 70px;
+  display: flex;
+  justify-content: center;
 }
 
 .card-body {
-  padding: 13px;
+  padding: 20px;
   margin: 7px;
-  width:550px;
-  height: 250px;
-  border-radius: 50px;
-  background: #e0e0e0;
-  box-shadow: 20px 20px 60px #bebebe,
+  width: 580px;
+  height: 270px;
+  border-radius: 30px;
+  background: #f1f1f1;
+  box-shadow: 20px 20px 40px #d0d0d0,
     -20px -20px 60px #ffffff;
 }
 
-.btn{
-   padding: 8px 25px;
-   display: block;
-   margin: auto;
-   border-radius: 8px;
-   border: none;
-   margin-top: 30px;
-   background: #6b64f3;
-   color: white;
-   font-weight: 600;
-   }
+.btn {
+  width: 200px;
+  padding: 8px 25px;
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+  border: none;
+  margin-top: 30px;
+  background: #6b64f3;
+  color: white;
+  font-weight: 600;
+}

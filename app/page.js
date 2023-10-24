@@ -1,95 +1,95 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+import React, {useState , useEffect} from 'react'
+import {initializeConnector} from '@web3-react/core'
+import { MetaMask } from '@web3-react/metamask'
+import { ethers } from 'ethers'
+import { formatEther, parseEther } from '@ethersproject/units'
+import abi from './abi.json'
 
-export default function Home() {
+
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import FaceIcon from '@mui/icons-material/Face';
+
+
+const [ metaMask , hooks ] = initializeConnector((actions) => new MetaMask({ actions }))
+const { useChainId , useAccounts, useIsActivating , useIsActive , useProvider } = hooks
+const contractChain = 11155111 
+const contractAddress = '0xfA8586F464D059E23bcd6F60F55295232769b8f9'
+
+export default function Page() {
+  const chainId = useChainId()
+  const accounts = useAccounts()
+  const isActive = useIsActive()
+
+  const provider = useProvider()
+  const [error, setError] = useState(undefined)
+
+  useEffect(() => {
+    void metaMask.connectEagerly().catch(() => {
+      console.debug('Failed to connect eagerly to metamask')
+    })
+  }, [])
+
+  //เชือ่มต่อ
+  const handleConnect = () => {
+    metaMask.activate(contractChain)
+  }
+//ยกเลิกการเชื่อมต่อ
+  const handleDisconnect = () => {
+    metaMask.resetState()
+  }
+  
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar  position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          </Typography>
+          
+          { isActive ? 
+          
+          < Stack direction = "row" spacing = {1} alignItems = "center" >
+              <Chip icon = {< FaceIcon / >}label = {accounts ? accounts[0] : ''}variant = "outlined" / >
+              <Button color='inherit' onClick={handleDisconnect} >Disconnect</Button> 
+          </Stack>
+            : 
+              <Button color='inherit' onClick={handleConnect} >Connect</Button>
+          } 
+        </Toolbar>
+      </AppBar>
+    </Box>
+    <div class = "card">
+      <div class="card-body">
+      <p>chainId : { chainId }</p>
+      <p>isActive : { isActive.toString() }</p>
+      <p>accounts : { accounts ? accounts[0] : '' }</p>
+      { isActive ? 
+        <input type='button' class="btn btn-denger" onClick={handleDisconnect} value={'Disconnect'} />
+      :
+        <input type='button'class="btn btn-primary"  onClick={handleConnect} value={'Connect Wallet'} />
+      }
+    </div>
+    </div>
+    
+    </>
   )
 }
